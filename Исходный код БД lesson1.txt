@@ -1,0 +1,103 @@
+-- DROP SCHEMA public;
+
+CREATE SCHEMA public AUTHORIZATION postgres;
+
+-- DROP SEQUENCE public.albums_albumid_seq;
+
+CREATE SEQUENCE public.albums_albumid_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+-- DROP SEQUENCE public.artist_artistid_seq;
+
+CREATE SEQUENCE public.artist_artistid_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+-- DROP SEQUENCE public.genre_genreid_seq;
+
+CREATE SEQUENCE public.genre_genreid_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+-- DROP SEQUENCE public.tracks_trackid_seq;
+
+CREATE SEQUENCE public.tracks_trackid_seq
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;-- public.genre definition
+
+-- Drop table
+
+-- DROP TABLE public.genre;
+
+CREATE TABLE public.genre (
+	genreid serial4 NOT NULL,
+	genrename varchar(100) NOT NULL,
+	CONSTRAINT genre_genrename_key UNIQUE (genrename),
+	CONSTRAINT genre_pkey PRIMARY KEY (genreid)
+);
+
+
+-- public.artist definition
+
+-- Drop table
+
+-- DROP TABLE public.artist;
+
+CREATE TABLE public.artist (
+	artistid serial4 NOT NULL,
+	"name" varchar(100) NOT NULL,
+	genreid int4 NULL,
+	CONSTRAINT artist_name_key UNIQUE (name),
+	CONSTRAINT artist_pkey PRIMARY KEY (artistid),
+	CONSTRAINT artist_genreid_fkey FOREIGN KEY (genreid) REFERENCES public.genre(genreid)
+);
+
+
+-- public.albums definition
+
+-- Drop table
+
+-- DROP TABLE public.albums;
+
+CREATE TABLE public.albums (
+	artistid int4 NULL,
+	albumid serial4 NOT NULL,
+	album_name varchar(100) NOT NULL,
+	"year" date NULL,
+	CONSTRAINT albums_album_name_key UNIQUE (album_name),
+	CONSTRAINT albums_pkey PRIMARY KEY (albumid),
+	CONSTRAINT albums_artistid_fkey FOREIGN KEY (artistid) REFERENCES public.artist(artistid)
+);
+
+
+-- public.tracks definition
+
+-- Drop table
+
+-- DROP TABLE public.tracks;
+
+CREATE TABLE public.tracks (
+	albumid int4 NULL,
+	trackid serial4 NOT NULL,
+	title varchar(100) NOT NULL,
+	"time" text NULL,
+	CONSTRAINT tracks_pkey PRIMARY KEY (trackid),
+	CONSTRAINT tracks_title_key UNIQUE (title),
+	CONSTRAINT tracks_albumid_fkey FOREIGN KEY (albumid) REFERENCES public.albums(albumid)
+);
+
+
