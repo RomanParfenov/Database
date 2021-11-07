@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS Genre (GenreID serial primary key, Genre_name varchar(60) not null);
+
+CREATE TABLE IF NOT EXISTS Artist (ArtistID serial primary key, Name varchar(60) not null);
+
+CREATE TABLE IF NOT EXISTS ArtistGenre (GenreID integer references Genre(GenreID), ArtistID integer references Artist(ArtistID), 
+constraint pkag primary key (GenreID, ArtistID));
+
+
+CREATE TABLE IF NOT EXISTS Albums (AlbumID serial primary key, Album_name varchar(60) not null, Year integer);
+
+
+CREATE TABLE IF NOT EXISTS AlbumsArtist (ArtistID integer references Artist(ArtistID), AlbumID integer references Albums(AlbumID), 
+constraint pkaa primary key (ArtistID, AlbumID));
+
+CREATE TABLE IF NOT EXISTS Collection (CollectionID serial primary key, Collection_name varchar(60) not null, Year integer);
+
+CREATE TABLE IF NOT EXISTS Track (TrackID serial primary key, AlbumID integer references Albums(AlbumID), 
+Title varchar(60) not null, Time integer);
+
+CREATE TABLE IF NOT EXISTS TrackCollection (TrackID integer references Track(TrackID), CollectionID integer references 
+Collection(CollectionID), constraint pktc primary key (TrackID, CollectionID));
+
